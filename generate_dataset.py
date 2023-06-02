@@ -6,7 +6,7 @@ import uuid
 
 images_per_sign = 200
 caltech_path = "./caltech_flattened"
-asl_path = "./asl_dataset"
+asl_path = "./asl_dataset"  # https://www.kaggle.com/datasets/ayuraj/asl-dataset
 asl_dst = "./asl_augmented"
 
 if not os.path.exists(asl_dst):

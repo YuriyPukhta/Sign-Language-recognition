@@ -1,7 +1,7 @@
 import os
 import shutil
 
-caltech_path = "./caltech_dataset"
+caltech_path = "./caltech_dataset"  # https://www.kaggle.com/datasets/athota1/caltech101
 caltech_flattened_path = "./caltech_flattened"
 
 if not os.path.exists(caltech_flattened_path):
