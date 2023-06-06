@@ -4,10 +4,10 @@ import numpy as np
 import random
 import uuid
 
-images_per_sign = 200
-caltech_path = "./caltech_flattened"
-asl_path = "./asl_dataset"  # https://www.kaggle.com/datasets/ayuraj/asl-dataset
-asl_dst = "./asl_augmented"
+images_per_sign = 100
+caltech_path = "D:\\project\\dataset\\caltech_flattened"
+asl_path = "D:\\project\\dataset\\ASL_Dataset\\asl_dataset"  # https://www.kaggle.com/datasets/ayuraj/asl-dataset
+asl_dst = "D:\\project\\dataset\\asl_augmented"
 
 if not os.path.exists(asl_dst):
     os.makedirs(asl_dst)
