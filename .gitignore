@@ -5,3 +5,4 @@
 /caltech_flattened
 .idea
 *.pyc
+asl/checkpoint_data_gen.pt
