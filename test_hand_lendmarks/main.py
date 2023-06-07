@@ -1,77 +1,46 @@
 import os
 
-import torch
-
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 import cv2
 import mediapipe as mp
-import numpy as np
-import time
-#from model import Resnet50WithFPN, load_model, test_transform
-import torchvision.transforms as transforms
-from PIL import Image
-
-#model = Resnet50WithFPN(26)
-#model = load_model(model)
-
 import torch
-import torchvision.transforms as transforms
-from torch.utils.data import DataLoader, TensorDataset, random_split
-import torch.nn as nn
-import torch.optim as optim
-import torchvision.datasets as datasets
-import torchvision
-from model import  SimpleCNN, load_model, min_max_scale
-import os
-from PIL import Image
-from tqdm import tqdm
+from model import SimpleCNN, load_model, min_max_scale
 import numpy as np
-
-
-
 
 model = SimpleCNN(26)
-
-
-
-
 model = load_model(model)
-
-
-
-
-
-
 model.eval()
 mphands = mp.solutions.hands
 hands = mphands.Hands()
 mp_drawing = mp.solutions.drawing_utils
 mapper = {0: 'a',
- 1: 'b',
- 2: 'c',
- 3: 'd',
- 4: 'e',
- 5: 'f',
- 6: 'g',
- 7: 'h',
- 8: 'i',
- 9: 'j',
- 10: 'k',
- 11: 'l',
- 12: 'm',
- 13: 'n',
- 14: 'o',
- 15: 'p',
- 16: 'q',
- 17: 'r',
- 18: 's',
- 19: 't',
- 20: 'u',
- 21: 'v',
- 22: 'w',
- 23: 'x',
- 24: 'y',
- 25: 'z'}
+          1: 'b',
+          2: 'c',
+          3: 'd',
+          4: 'e',
+          5: 'f',
+          6: 'g',
+          7: 'h',
+          8: 'i',
+          9: 'j',
+          10: 'k',
+          11: 'l',
+          12: 'm',
+          13: 'n',
+          14: 'o',
+          15: 'p',
+          16: 'q',
+          17: 'r',
+          18: 's',
+          19: 't',
+          20: 'u',
+          21: 'v',
+          22: 'w',
+          23: 'x',
+          24: 'y',
+          25: 'z'}
+
 cap = cv2.VideoCapture(0)
 _, frame = cap.read()
 h, w, c = frame.shape
@@ -80,7 +49,7 @@ while True:
     _, frame = cap.read()
 
     k = cv2.waitKey(1)
-    if k%256 == 27:
+    if k % 256 == 27:
         # ESC pressed
         print("Escape hit, closing...")
         break
@@ -117,10 +86,7 @@ while True:
             output = model(sign_data)
             _, preds = torch.max(output.data, 1)
             print(mapper[preds.item()])
-            cv2.imshow("Frame",frame )
-
-cap.release()
-cv2.destroyAllWindows()
+            cv2.imshow("Frame", frame)
 
 cap.release()
 cv2.destroyAllWindows()

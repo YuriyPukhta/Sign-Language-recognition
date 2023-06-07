@@ -4,3 +4,4 @@
 /caltech_dataset
 /caltech_flattened
 .idea
+*.pyc
