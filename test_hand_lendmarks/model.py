@@ -5,6 +5,7 @@ import torch.nn as nn
 
 checkpoint_path = "../asl/checkpoint_lm_small.pt"
 
+
 def min_max_scale(lst):
     min_val = min(lst)
     max_val = max(lst)
