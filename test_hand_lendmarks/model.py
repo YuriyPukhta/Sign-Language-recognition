@@ -3,9 +3,8 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader, TensorDataset, random_split
 import torch.nn as nn
 
+checkpoint_path = "../asl/checkpoint_lm_small.pt"
 
-
-checkpoint_path = "D:/project/asl/checkpoint_lm_small.pt"
 
 def min_max_scale(lst):
     min_val = min(lst)

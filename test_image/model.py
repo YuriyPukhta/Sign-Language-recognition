@@ -6,7 +6,7 @@ import torch.optim as optim
 import torchvision.datasets as datasets
 from torchvision.models import resnet50
 
-checkpoint_path = "D:/project/asl/checkpoint_data_gen.pt"
+checkpoint_path = "../asl/checkpoint_data_gen.pt"
 
 test_transform = transforms.Compose([
     transforms.Resize((224, 224)),
