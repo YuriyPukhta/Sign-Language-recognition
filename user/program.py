@@ -170,6 +170,9 @@ class ASL_GUI:
                             if self.merged_text[-1] != letter:
                                 self.merged_text += letter
                                 self.update_text()
+                            elif p_score > 0.5:
+                                self.merged_text += letter
+                                self.update_text()
                         else:
                             self.merged_text += letter
                             self.update_text()
