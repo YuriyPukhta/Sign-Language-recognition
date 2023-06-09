@@ -11,7 +11,7 @@ import pandas as pd
 import time
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-
+SHOW_LANDMARKS = False
 mphands = mp.solutions.hands
 hands = mphands.Hands()
 mp_drawing = mp.solutions.drawing_utils
@@ -53,18 +53,17 @@ for subdir in os.listdir(dataset):
         hand_landmarks = result.multi_hand_landmarks
         if hand_landmarks:
             handLMs = hand_landmarks[0]
-            '''
-            for  hl in enumerate(handLMs):
-                mp_drawing.draw_landmarks(
-                    image,
-                    hl,
-                    mphands.HAND_CONNECTIONS,
-                    mp_drawing_styles.get_default_hand_landmarks_style(),
-                    mp_drawing_styles.get_default_hand_connections_style())
+            if SHOW_LANDMARKS:
+                for  hl in enumerate(handLMs):
+                    mp_drawing.draw_landmarks(
+                        image,
+                        hl,
+                        mphands.HAND_CONNECTIONS,
+                        mp_drawing_styles.get_default_hand_landmarks_style(),
+                        mp_drawing_styles.get_default_hand_connections_style())
             
-            '''
+
             new_hande = []
-            #print(handLMs)
             X_arr = []
             Y_arr = []
             Z_arr = []
@@ -72,9 +71,6 @@ for subdir in os.listdir(dataset):
                 X_arr.append(hl.x)
                 Y_arr.append(hl.y)
                 Z_arr.append(hl.z)
-                #new_hande.append(hl.x)
-                #new_hande.append(hl.y)
-                #new_hande.append(hl.z)
             X_arr = min_max_scale(X_arr)
             Y_arr = min_max_scale(Y_arr)
             Z_arr = min_max_scale(Z_arr)
@@ -95,8 +91,4 @@ columns.append("sign")
 df = pd.DataFrame(Landmarks,
                   columns=columns)
 df.to_csv(os.path.join(save_dataset_path, 'LM_min_max .csv'), index=False)
-
-
-    #print(ref_file)
-    #print(name_sign)
 

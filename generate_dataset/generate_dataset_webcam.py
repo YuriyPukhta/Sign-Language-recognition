@@ -4,19 +4,11 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import time
-from segment_model import unet
 from keras.layers import Input,Conv2D,MaxPooling2D,UpSampling2D, BatchNormalization
 from keras.models import Model
+import torchvision.transforms as transforms
 from PIL import Image
 import pandas as pd
-
-
-
-from model import Resnet50WithFPN, load_model, test_transform
-
-model = Resnet50WithFPN(26)
-model = load_model(model)
-
 
 
 mphands = mp.solutions.hands
@@ -43,7 +35,6 @@ Landmarks = []
 def variance_of_laplacian(image):
 	return cv2.Laplacian(image, cv2.CV_64F).var()
 
-
 if not os.path.exists(save_dataset_path):
     os.makedirs(save_dataset_path)
 
@@ -54,9 +45,6 @@ for subdir in os.listdir(reference_dataset):
     ref_file.append(os.path.join(image___, os.listdir(image___)[1]))
 
     name_sign.append(subdir)
-    #print(ref_file)
-    #print(name_sign)
-
 while True:
     _, frame = cap.read()
 
@@ -97,7 +85,6 @@ while True:
         save_sign_path = os.path.join(save_dataset_path, name_sign[sign])
         if not os.path.exists(save_sign_path):
             os.makedirs(save_sign_path)
-
         continue
 
     framergb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -105,9 +92,6 @@ while True:
     hand_landmarks = result.multi_hand_landmarks
     if hand_landmarks:
         handLMs = hand_landmarks[0]
-
-
-
         x_max = 0
         y_max = 0
         x_min = w
@@ -125,8 +109,6 @@ while True:
 
         X = int(X/len(handLMs.landmark))
         Y = int(Y/len(handLMs.landmark))
-        #print(X, Y)
-        #print(w,h)
         l = max(abs(y_max - y_min), abs(x_max - x_min))
         x_min = X - round(l/2)
         x_max = x_min + l
@@ -136,7 +118,6 @@ while True:
         y_max = y_max + 20
         x_min = x_min - 10
         x_max = x_max + 20
-        #analysisframe = analysisframe[y_min:y_max, x_min:x_max]
         if x_max not in range(0, w):
             print("out_of_screan")
             continue
@@ -149,7 +130,6 @@ while True:
         if y_min not in range(0, h):
             print("out_of_screan")
             continue
-        #print(frame.shape, frame[y_min:y_max, x_min: x_max, :].shape)
         new_frame = frame[y_min:y_max, x_min: x_max, :]
         image = new_frame.copy()
         image = cv2.resize(image, (200,200), interpolation = cv2.INTER_AREA)
@@ -161,8 +141,6 @@ while True:
         text = "Blurry"
         cv2.putText(frame, "{}: {:.2f}".format(text, fm), (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 3)
-        #start_point = (y_max, x_min)
-        #end_point = (y_min, x_max)
         start_point = (x_min, y_min )
         end_point = (x_max , y_max)
 
@@ -176,17 +154,6 @@ while True:
                 print(f"image save {img_name}")
                 cv2.imshow("Frame", frame)
                 image = Image.fromarray(frame[y_min:y_max, x_min: x_max, :])
-                # image = Image.open("D:/project/dataset/ASL_Dataset/Test/A/3001.jpg")
-                # image_t = torch.tensor(image)
-                # image_t = torch.transpose(image_t, 0, 2).transpose(1, 2)
-
-                transformed_image = test_transform(image)
-                # print(transformed_image[:])
-                transformed_image = torch.unsqueeze(transformed_image, 0)
-
-                # print(transformed_image.shape)
-                output = model(transformed_image)
-                print(torch.max(output.data, 1)[1].item())
                 new_hande = []
                 for l in handLMs.landmark:
                     new_hande.append(l.x)
@@ -194,7 +161,6 @@ while True:
                     new_hande.append(l.z)
                 new_hande.append(name_sign[sign])
                 Landmarks.append(new_hande)
-                #cv2.imwrite(os.path.join(save_sign_path, img_name), image)
             else:
                 curent_frame_skip += 1
                 cv2.imshow("Frame", frame)
